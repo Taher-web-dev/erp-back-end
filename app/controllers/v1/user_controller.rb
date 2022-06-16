@@ -30,12 +30,12 @@ class V1::UserController < ApplicationController
     begin
       @user=User.find(params[:id])
     rescue
-      render json: {status: Status.failed, error: USER_NOT_FOUND}
+      render json: {status: Status.failed, error: USER_NOT_FOUND}, status: :unprocessable_entity
     else
       if @user.update(user_params)
-        render json: {status: Status.success, data:@user}
+        render json: {status: Status.success, data:@user}, status: :ok
       else
-        render json: {status: Status.failed, error:@user.errors}
+        render json: {status: Status.failed, error:@user.errors}, status: :unprocessable_entity
       end
     end
   end
@@ -45,13 +45,13 @@ class V1::UserController < ApplicationController
     begin
       @user = User.find(params[:id])
     rescue
-      render json: {status: Status.failed,error: USER_NOT_FOUND}
+      render json: {status: Status.failed,error: USER_NOT_FOUND}, status: :unprocessable_entity
     
     else 
       if @user.destroy
-      render json: {status: Status.success, data:@user}
+      render json: {status: Status.success, data:@user}, status: :ok
       else
-      render json: {status: Status.failed, error: @user.errors}
+      render json: {status: Status.failed, error: @user.errors}, status: :unprocessable_entity
       end
     end
   end
