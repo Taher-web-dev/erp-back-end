@@ -21,7 +21,7 @@ class V1::UserController < ApplicationController
       if @user.save
         render json: {status: Status.success, data: @user}, status: :ok
       else
-        render json: {status: Status.failed, error: @user.errors}, status: :unprocessable_entity
+        render json: {status: Status.failed, error: @user.errors}, status: :forbidden
       end
     end
   end
