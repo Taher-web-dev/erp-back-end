@@ -1,5 +1,5 @@
-require_relative('../helpers/responses_helper')
-require_relative('../helpers/errors')
+#require_relative('../helpers/responses_helper')
+#require_relative('../helpers/errors')
 class V1::UserController < ApplicationController
   def index
     @users = User.all

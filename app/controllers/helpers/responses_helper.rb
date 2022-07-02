@@ -1,4 +1,4 @@
-class ApiException < StandardError
+class Helpers::ApiException < StandardError
   def initialize(_status_code, error)
     super()
     @status_code = type
@@ -6,7 +6,7 @@ class ApiException < StandardError
   end
 end
 
-class Status
+class Helpers::Status
   @success = 'SUCCESS'
   @failed = 'FAILED'
   class << self
@@ -15,5 +15,20 @@ class Status
 
   class << self
     attr_reader :failed
+  end
+end
+
+class Helpers::Error
+  def initialize(type, code, message)
+    @type = type
+    @code = code
+    @message = message
+    display_error(type, code, message)
+  end
+
+  private
+
+  def display_error(type, code, message)
+    { type:, code:, message: }
   end
 end
