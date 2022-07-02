@@ -33,5 +33,6 @@ module ErpBackend
         )
       end
     end
+    config.autoloader = :classic
   end
 end
