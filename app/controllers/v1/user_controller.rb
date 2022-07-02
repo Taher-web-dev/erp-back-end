@@ -2,27 +2,26 @@ require_relative('./responses_helper')
 require_relative('./errors')
 class V1::UserController < ApplicationController
   def index
-    @users = nil
-    begin
-      @users = User.all
-    rescue StandardError
-      render json: { status: Status.failed, error: USER_NOT_FOUND }, status: :unprocessable_entity
-    else
-      render json: { status: Status.success, data: @users }, status: :ok
-    end
+    @users = User.all
+    render json: { status: Status.success, data: @users }, status: :ok
   end
 
   def create
     @user = nil
     begin
       @user = User.new(user_params)
-    rescue
-      render json: { status: Status.failed, error: BODY_PARAMETRS }, status: :unprocessable_entity
+    rescue StandardError
+      render json: { status: Status.failed, error: BODY_PARAMETRS }, status: :bad_request
     else
       if @user.save
         render json: { status: Status.success, data: @user }, status: :ok
       else
-        render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :bad_request
+        begin
+          @user.save!
+        rescue StandardError => e
+          new_err = Error.new('Validation', 50, e.message)
+          render json: { status: Status.failed, error: new_err }, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -31,16 +30,27 @@ class V1::UserController < ApplicationController
     @user = nil
     begin
       @user = User.find(params[:id])
-    rescue
+    rescue StandardError
       render json: { status: Status.failed, error: USER_NOT_FOUND }, status: :not_found
     else
-      body_params = user_params.to_h
-      if body_params.size == 0
-        render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
-      elsif @user.update(user_params)
-        render json: { status: Status.success, data: @user }, status: :ok
+      begin
+        user_params
+      rescue StandardError
+        render json: { status: Status.failed, error: BODY_PARAMETRS }, status: :bad_request
       else
-        render json: { status: Status.failed, error: @user.errors }, status: :unprocessable_entity
+        body_params = user_params.to_h
+        if body_params.size.zero?
+          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
+        elsif @user.update(user_params)
+          render json: { status: Status.success, data: @user }, status: :ok
+        else
+          begin
+            @user.update!
+          rescue StandardError => e
+            err = Error.new('Validation', 50, e.message)
+            render json: { status: Status.failed, error: err }, status: :unprocessable_entity
+          end
+        end
       end
     end
   end
@@ -50,12 +60,15 @@ class V1::UserController < ApplicationController
     begin
       @user = User.find(params[:id])
     rescue StandardError
-      render json: { status: Status.failed, error: USER_NOT_FOUND }, status: :unprocessable_entity
+      render json: { status: Status.failed, error: USER_NOT_FOUND }, status: :not_found
     else
-      if @user.destroy
-        render json: { status: Status.success, data: @user }, status: :ok
+      begin
+        @user.destroy!
+      rescue =>e
+        err = Error.new('Validation', 50, e.message)
+        render json: {status: Status.failed, error: err}, status: :unprocessable_entity
       else
-        render json: { status: Status.failed, error: @user.errors }, status: :unprocessable_entity
+        render json: { status: Status.success, data: @user }, status: :ok
       end
     end
   end
@@ -63,6 +76,6 @@ class V1::UserController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:Full_name, :username, :password, :role)
+    params.require(:user).permit(:username, :password, :role, :employee_id)
   end
 end

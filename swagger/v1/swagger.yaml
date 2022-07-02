@@ -4,6 +4,143 @@ info:
   title: API V1
   version: v1
 paths:
+  "/v1/employee":
+    get:
+      summary: list employees
+      tags:
+      - Employees
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create employee
+      tags:
+      - Employees
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '400':
+          description: Body parametrs
+        '422':
+          description: Validation data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                family_name:
+                  type: string
+                birthday_date:
+                  type: string
+                  format: date
+                hiring_date:
+                  type: string
+                  format: date
+                photo_profile:
+                  type: string
+                net_salary:
+                  type: number
+                  format: float
+              required:
+              - name
+              - family_name
+  "/v1/employee/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    patch:
+      summary: update employee
+      tags:
+      - Employees
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: Employee not found
+        '400':
+          description: Body parametrs
+        '403':
+          description: Missing Required Parametrs
+        '422':
+          description: Validation data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                family_name:
+                  type: string
+                birthday_date:
+                  type: string
+                  format: date
+                hiring_date:
+                  type: string
+                  format: date
+                photo_profile:
+                  type: string
+                net_salary:
+                  type: number
+                  format: float
+    put:
+      summary: update employee
+      tags:
+      - Employees
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: Employee not found
+        '400':
+          description: Body parametrs
+        '403':
+          description: Missing Required Parametrs
+        '422':
+          description: Validation data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                family_name:
+                  type: string
+                birthday_date:
+                  type: string
+                  format: date
+                hiring_date:
+                  type: string
+                  format: date
+                photo_profile:
+                  type: string
+                net_salary:
+                  type: number
+                  format: float
+    delete:
+      summary: delete employee
+      tags:
+      - Employees
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: Employee not found
+        '422':
+          description: Validation data
   "/v1/user":
     get:
       summary: list users
@@ -12,8 +149,6 @@ paths:
       responses:
         '200':
           description: successful
-        '422':
-          description: users not found
     post:
       summary: create user
       tags:
@@ -22,29 +157,29 @@ paths:
       responses:
         '200':
           description: successful
-        '422':
+        '400':
           description: body parametrs
-        '403':
-          description: database validation and processing
+        '422':
+          description: validation
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                Full_name:
-                  type: string
                 username:
                   type: string
                 password:
                   type: string
                 role:
                   type: string
+                employee_id:
+                  type: integer
               required:
-              - Full_name
               - username
               - password
               - role
+              - employee_id
   "/v1/user/{id}":
     parameters:
     - name: id
@@ -52,41 +187,62 @@ paths:
       schema:
         type: string
       required: true
-    - name: user
-      in: body
-      schema:
-        type: object
-        properties:
-          Full_name:
-            type: string
-          username:
-            type: string
-          password:
-            type: string
-          role:
-            type: string
     patch:
       summary: update user
       tags:
       - Users
+      parameters: []
       responses:
         '200':
           description: successful
         '404':
-          description: user not found
+          description: User not found
+        '400':
+          description: Body parametrs
+        '401':
+          description: Missing parametrs
         '422':
-          description: database validation and processing
+          description: Validation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
     put:
       summary: update user
       tags:
       - Users
+      parameters: []
       responses:
         '200':
           description: successful
         '404':
-          description: user not found
+          description: User not found
+        '400':
+          description: Body parametrs
+        '401':
+          description: Missing parametrs
         '422':
-          description: database validation and processing
+          description: Validation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
     delete:
       summary: delete user
       tags:
@@ -101,6 +257,10 @@ paths:
       responses:
         '200':
           description: successful
+        '404':
+          description: User not found
+        '422':
+          description: Validation
 servers:
 - url: http://{defaultHost}
   variables:

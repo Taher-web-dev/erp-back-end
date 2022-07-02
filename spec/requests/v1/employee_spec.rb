@@ -1,10 +1,13 @@
 require 'swagger_helper'
 
-RSpec.describe 'v1/user', type: :request do
-  path '/v1/user' do
-    get('list users') do
-      tags 'Users'
+RSpec.describe 'v1/employee', type: :request do
+
+  path '/v1/employee' do
+
+    get('list employees') do
+      tags 'Employees'
       response(200, 'successful') do
+
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -16,20 +19,23 @@ RSpec.describe 'v1/user', type: :request do
       end
     end
 
-    post('create user') do
-      tags 'Users'
+    post('create employee') do
+      tags 'Employees'
       consumes 'application/json'
-      parameter name: :user, in: :body, schema: {
+      parameter name: :employee, in: :body, schema: {
         type: :object,
         properties: {
-          username: { type: :string },
-          password: { type: :string },
-          role: { type: :string },
-          employee_id: { type: :integer},
+          name: { type: :string },
+          family_name: { type: :string },
+          birthday_date: { type: :string , format: :date},
+          hiring_date: { type: :string, format: :date},
+          photo_profile: { type: :string },
+          net_salary: { type: :number, format: :float},
         },
-        required: %w[username password role employee_id],
+        required: %w[name family_name ],
       }
       response(200, 'successful') do
+
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -39,29 +45,32 @@ RSpec.describe 'v1/user', type: :request do
         end
         run_test!
       end
-      response(400, 'body parametrs') do
+
+      response(400, 'Body parametrs') do
         run_test!
       end
-      response(422, 'validation') do
+      response(422, 'Validation data') do
         run_test!
       end
     end
   end
-  path '/v1/user/{id}' do
+
+  path '/v1/employee/{id}' do
     # You'll want to customize the parameter types...
-    parameter name: 'id', in: :path, schema: {
-      type: :string
-    }
-    patch('update user') do
-      tags 'Users'
+    parameter name: 'id', in: :path, type: :string, description: 'id'
+    patch('update employee') do
+      tags 'Employees'
       consumes 'application/json'
-      parameter name: :user, in: :body, schema: {
+      parameter name: :employee, in: :body, schema: {
       type: :object,
       properties: {
-        username: { type: :string },
-        password: { type: :string },
-        role: { type: :string },
-      }
+        name: { type: :string },
+        family_name: { type: :string },
+        birthday_date: { type: :string , format: :date},
+        hiring_date: { type: :string, format: :date},
+        photo_profile: { type: :string },
+        net_salary: { type: :number, format: :float},
+      },
     }
       response(200, 'successful') do
         let(:id) { '123' }
@@ -75,30 +84,33 @@ RSpec.describe 'v1/user', type: :request do
         end
         run_test!
       end
-      response(404, 'User not found') do
+      response(404, 'Employee not found') do
         run_test!
       end
       response(400, 'Body parametrs') do
         run_test!
       end
-      response(401, 'Missing parametrs') do
+      response(403, 'Missing Required Parametrs') do
         run_test!
       end
-      response(422, 'Validation') do
+      response(422, 'Validation data') do
         run_test!
       end
     end
 
-    put('update user') do
-      tags 'Users'
+    put('update employee') do
+      tags 'Employees'
       consumes 'application/json'
-      parameter name: :user, in: :body, schema: {
+      parameter name: :employee, in: :body, schema: {
       type: :object,
       properties: {
-        username: { type: :string },
-        password: { type: :string },
-        role: { type: :string },
-      }
+        name: { type: :string },
+        family_name: { type: :string },
+        birthday_date: { type: :string , format: :date},
+        hiring_date: { type: :string, format: :date},
+        photo_profile: { type: :string },
+        net_salary: { type: :number, format: :float},
+      },
     }
       response(200, 'successful') do
         let(:id) { '123' }
@@ -112,24 +124,22 @@ RSpec.describe 'v1/user', type: :request do
         end
         run_test!
       end
-      response(404, 'User not found') do
+      response(404, 'Employee not found') do
         run_test!
       end
       response(400, 'Body parametrs') do
         run_test!
       end
-      response(401, 'Missing parametrs') do
+      response(403, 'Missing Required Parametrs') do
         run_test!
       end
-      response(422, 'Validation') do
+      response(422, 'Validation data') do
         run_test!
       end
     end
-  end
-  path '/v1/user/{id}' do
-    delete('delete user') do
-      tags 'Users'
-      parameter name: 'id', in: :path, type: :string, description: 'id'
+
+    delete('delete employee') do
+      tags 'Employees'
       response(200, 'successful') do
         let(:id) { '123' }
 
@@ -142,10 +152,10 @@ RSpec.describe 'v1/user', type: :request do
         end
         run_test!
       end
-      response(404, 'User not found') do
+      response(404, 'Employee not found') do
         run_test!
       end
-      response(422, 'Validation') do
+      response(422, 'Validation data') do
         run_test!
       end
     end

@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  validates :Full_name, presence: true
+  belongs_to :employee
   validates :username, presence: true
   validates :username, uniqueness: { scope: :password }
   validates :password, presence: true
