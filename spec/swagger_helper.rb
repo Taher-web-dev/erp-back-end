@@ -28,6 +28,14 @@ RSpec.configure do |config|
               default: '127.0.0.1:3000/'
             }
           }
+        },
+        {
+          url: 'https://{defaultHost}',
+          variables: {
+            defaultHost: {
+              default: 'bodor-human-ressources-backend.herokuapp.com/'
+            }
+          }
         }
       ]
     }
