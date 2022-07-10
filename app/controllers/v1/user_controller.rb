@@ -1,6 +1,9 @@
 #require_relative('../helpers/responses_helper')
 #require_relative('../helpers/errors')
 class V1::UserController < ApplicationController
+  Status = Helpers::ResponsesHelper::Status
+  Error = Helpers::ResponsesHelper::Error
+  Errors = Helpers::Errors
   def index
     @users = User.all
     render json: { status: Status.success, data: @users }, status: :ok
@@ -11,7 +14,7 @@ class V1::UserController < ApplicationController
     begin
       @user = User.new(user_params)
     rescue StandardError
-      render json: { status: Status.failed, error: BODY_PARAMETRS }, status: :bad_request
+      render json: { status: Status.failed, error: Errors::BODY_PARAMETRS }, status: :bad_request
     else
       if @user.save
         render json: { status: Status.success, data: @user }, status: :ok
@@ -31,7 +34,7 @@ class V1::UserController < ApplicationController
     begin
       @user = User.find(params[:id])
     rescue StandardError
-      render json: { status: Status.failed, error: USER_NOT_FOUND }, status: :not_found
+      render json: { status: Status.failed, error: Errors::USER_NOT_FOUND }, status: :not_found
     else
       begin
         update_params
@@ -40,7 +43,7 @@ class V1::UserController < ApplicationController
       else
         body_params = update_params.to_h
         if body_params.size.zero?
-          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
+          render json: { status: Status.failed, error: Errors::MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
         elsif @user.update(body_params)
           render json: { status: Status.success, data: @user }, status: :ok
         else
@@ -60,7 +63,7 @@ class V1::UserController < ApplicationController
     begin
       @user = User.find(params[:id])
     rescue StandardError
-      render json: { status: Status.failed, error: USER_NOT_FOUND }, status: :not_found
+      render json: { status: Status.failed, error: Errors::USER_NOT_FOUND }, status: :not_found
     else
       begin
         @user.destroy!

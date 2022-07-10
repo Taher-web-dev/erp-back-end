@@ -1,6 +1,9 @@
 #require_relative('../helpers/responses_helper')
 #require_relative('../helpers/errors')
 class V1::EmployeeController < ApplicationController
+  Status = Helpers::ResponsesHelper::Status
+  Error = Helpers::ResponsesHelper::Error
+  Errors = Helpers::Errors
   def index
     @employees = Employee.all
     render json: { status: Status.success, data: @employees }, status: :ok
@@ -11,7 +14,7 @@ class V1::EmployeeController < ApplicationController
     begin
       @employee = Employee.new(employees_param)
     rescue StandardError
-      render json: { status: Status.failed, error: BODY_PARAMETRS }, status: :bad_request
+      render json: { status: Status.failed, error: Errors::BODY_PARAMETRS }, status: :bad_request
     else
       if @employee.save
         render json: { status: Status.success, data: @employee }, status: :ok
@@ -31,16 +34,16 @@ class V1::EmployeeController < ApplicationController
     begin
       @employee = Employee.find(params[:id])
     rescue StandardError
-      render json: { status: Status.failed, error: EMPLOYEE_NOT_FOUND }, status: :not_found
+      render json: { status: Status.failed, error: Errors::EMPLOYEE_NOT_FOUND }, status: :not_found
     else
       begin
         employees_param
       rescue StandardError
-        render json: { status: Status.failed, error: BODY_PARAMETRS }, status: :bad_request
+        render json: { status: Status.failed, error: Errors::BODY_PARAMETRS }, status: :bad_request
       else
         body_params = employees_param.to_h
         if body_params.size.zero?
-          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
+          render json: { status: Status.failed, error: Errors::MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
         elsif @employee.update(employees_param)
           render json: { status: Status.success, data: @employee }, status: :ok
         else
@@ -60,7 +63,7 @@ class V1::EmployeeController < ApplicationController
     begin
       @employee = Employee.find(params[:id])
     rescue StandardError
-      render json: { status: Status.failed, error: EMPLOYEE_NOT_FOUND }, status: :not_found
+      render json: { status: Status.failed, error: Errors::EMPLOYEE_NOT_FOUND }, status: :not_found
     else
       begin
         @employee.destroy!
