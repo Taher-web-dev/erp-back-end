@@ -1,4 +1,4 @@
-#require_relative './responses_helpers'
+require_relative './responses_helper'
 
 USER_NOT_FOUND = Error.new('User', 101, 'User not found')
 EMPLOYEE_NOT_FOUND = Error.new('Employee', 102, 'Employee not found')
