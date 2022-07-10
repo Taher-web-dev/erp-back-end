@@ -1,13 +1,10 @@
 require 'swagger_helper'
 
 RSpec.describe 'v1/employee', type: :request do
-
   path '/v1/employee' do
-
     get('list employees') do
       tags 'Employees'
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -27,15 +24,14 @@ RSpec.describe 'v1/employee', type: :request do
         properties: {
           name: { type: :string },
           family_name: { type: :string },
-          birthday_date: { type: :string , format: :date},
-          hiring_date: { type: :string, format: :date},
+          birthday_date: { type: :string, format: :date },
+          hiring_date: { type: :string, format: :date },
           photo_profile: { type: :string },
-          net_salary: { type: :number, format: :float},
+          net_salary: { type: :number, format: :float }
         },
-        required: %w[name family_name ],
+        required: %w[name family_name]
       }
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -62,16 +58,16 @@ RSpec.describe 'v1/employee', type: :request do
       tags 'Employees'
       consumes 'application/json'
       parameter name: :employee, in: :body, schema: {
-      type: :object,
-      properties: {
-        name: { type: :string },
-        family_name: { type: :string },
-        birthday_date: { type: :string , format: :date},
-        hiring_date: { type: :string, format: :date},
-        photo_profile: { type: :string },
-        net_salary: { type: :number, format: :float},
-      },
-    }
+        type: :object,
+        properties: {
+          name: { type: :string },
+          family_name: { type: :string },
+          birthday_date: { type: :string, format: :date },
+          hiring_date: { type: :string, format: :date },
+          photo_profile: { type: :string },
+          net_salary: { type: :number, format: :float }
+        }
+      }
       response(200, 'successful') do
         let(:id) { '123' }
 
@@ -102,16 +98,16 @@ RSpec.describe 'v1/employee', type: :request do
       tags 'Employees'
       consumes 'application/json'
       parameter name: :employee, in: :body, schema: {
-      type: :object,
-      properties: {
-        name: { type: :string },
-        family_name: { type: :string },
-        birthday_date: { type: :string , format: :date},
-        hiring_date: { type: :string, format: :date},
-        photo_profile: { type: :string },
-        net_salary: { type: :number, format: :float},
-      },
-    }
+        type: :object,
+        properties: {
+          name: { type: :string },
+          family_name: { type: :string },
+          birthday_date: { type: :string, format: :date },
+          hiring_date: { type: :string, format: :date },
+          photo_profile: { type: :string },
+          net_salary: { type: :number, format: :float }
+        }
+      }
       response(200, 'successful') do
         let(:id) { '123' }
 

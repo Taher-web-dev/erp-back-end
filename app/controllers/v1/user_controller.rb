@@ -1,5 +1,5 @@
-require_relative('../helpers/responses_helper')
-require_relative('../helpers/errors')
+#require_relative('../helpers/responses_helper')
+#require_relative('../helpers/errors')
 class V1::UserController < ApplicationController
   def index
     @users = User.all
@@ -40,9 +40,9 @@ class V1::UserController < ApplicationController
       else
         body_params = update_params.to_h
         if body_params.size.zero?
-          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized  
+          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
         elsif @user.update(body_params)
-            render json: { status: Status.success, data: @user }, status: :ok
+          render json: { status: Status.success, data: @user }, status: :ok
         else
           begin
             @user.update!(body_params)
@@ -64,9 +64,9 @@ class V1::UserController < ApplicationController
     else
       begin
         @user.destroy!
-      rescue =>e
+      rescue StandardError => e
         err = Error.new('Validation', 50, e.message)
-        render json: {status: Status.failed, error: err}, status: :unprocessable_entity
+        render json: { status: Status.failed, error: err }, status: :unprocessable_entity
       else
         render json: { status: Status.success, data: @user }, status: :ok
       end

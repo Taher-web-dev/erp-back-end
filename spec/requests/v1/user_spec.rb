@@ -25,9 +25,9 @@ RSpec.describe 'v1/user', type: :request do
           username: { type: :string },
           password: { type: :string },
           role: { type: :string },
-          employee_id: { type: :integer},
+          employee_id: { type: :integer }
         },
-        required: %w[username password role employee_id],
+        required: %w[username password role employee_id]
       }
       response(200, 'successful') do
         after do |example|
@@ -56,13 +56,13 @@ RSpec.describe 'v1/user', type: :request do
       tags 'Users'
       consumes 'application/json'
       parameter name: :user, in: :body, schema: {
-      type: :object,
-      properties: {
-        username: { type: :string },
-        password: { type: :string },
-        role: { type: :string },
+        type: :object,
+        properties: {
+          username: { type: :string },
+          password: { type: :string },
+          role: { type: :string }
+        }
       }
-    }
       response(200, 'successful') do
         let(:id) { '123' }
 
@@ -93,13 +93,13 @@ RSpec.describe 'v1/user', type: :request do
       tags 'Users'
       consumes 'application/json'
       parameter name: :user, in: :body, schema: {
-      type: :object,
-      properties: {
-        username: { type: :string },
-        password: { type: :string },
-        role: { type: :string },
+        type: :object,
+        properties: {
+          username: { type: :string },
+          password: { type: :string },
+          role: { type: :string }
+        }
       }
-    }
       response(200, 'successful') do
         let(:id) { '123' }
 

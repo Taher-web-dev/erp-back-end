@@ -1,5 +1,5 @@
-require_relative('../helpers/responses_helper')
-require_relative('../helpers/errors')
+#require_relative('../helpers/responses_helper')
+#require_relative('../helpers/errors')
 class V1::EmployeeController < ApplicationController
   def index
     @employees = Employee.all
@@ -40,7 +40,7 @@ class V1::EmployeeController < ApplicationController
       else
         body_params = employees_param.to_h
         if body_params.size.zero?
-          render json: {status: Status.failed, error: MISSING_REQUIRED_PARAMETRS}, status: :unauthorized
+          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
         elsif @employee.update(employees_param)
           render json: { status: Status.success, data: @employee }, status: :ok
         else
