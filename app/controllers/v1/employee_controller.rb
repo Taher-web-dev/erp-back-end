@@ -1,5 +1,5 @@
-#require_relative('../helpers/responses_helper')
-#require_relative('../helpers/errors')
+require_relative('../helpers/responses_helper')
+require_relative('../helpers/errors')
 class V1::EmployeeController < ApplicationController
   def index
     @employees = Employee.all
@@ -45,7 +45,7 @@ class V1::EmployeeController < ApplicationController
           render json: { status: Status.success, data: @employee }, status: :ok
         else
           begin
-            @employee.update!
+            @employee.update!(employees_param)
           rescue StandardError => e
             err = Error.new('Validation', 50, e.message)
             render json: { status: Status.failed, error: err }, status: :unprocessable_entity

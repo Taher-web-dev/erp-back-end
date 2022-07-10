@@ -1,4 +1,4 @@
-class Helpers::ApiException < StandardError
+class ApiException < StandardError
   def initialize(_status_code, error)
     super()
     @status_code = type
@@ -6,7 +6,7 @@ class Helpers::ApiException < StandardError
   end
 end
 
-class Helpers::Status
+class Status
   @success = 'SUCCESS'
   @failed = 'FAILED'
   class << self
@@ -18,7 +18,7 @@ class Helpers::Status
   end
 end
 
-class Helpers::Error
+class Error
   def initialize(type, code, message)
     @type = type
     @code = code

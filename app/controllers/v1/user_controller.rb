@@ -1,5 +1,5 @@
-#require_relative('../helpers/responses_helper')
-#require_relative('../helpers/errors')
+require_relative('../helpers/responses_helper')
+require_relative('../helpers/errors')
 class V1::UserController < ApplicationController
   def index
     @users = User.all
@@ -34,18 +34,18 @@ class V1::UserController < ApplicationController
       render json: { status: Status.failed, error: USER_NOT_FOUND }, status: :not_found
     else
       begin
-        user_params
+        update_params
       rescue StandardError
         render json: { status: Status.failed, error: BODY_PARAMETRS }, status: :bad_request
       else
-        body_params = user_params.to_h
+        body_params = update_params.to_h
         if body_params.size.zero?
-          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized
-        elsif @user.update(user_params)
-          render json: { status: Status.success, data: @user }, status: :ok
+          render json: { status: Status.failed, error: MISSING_REQUIRED_PARAMETRS }, status: :unauthorized  
+        elsif @user.update(body_params)
+            render json: { status: Status.success, data: @user }, status: :ok
         else
           begin
-            @user.update!
+            @user.update!(body_params)
           rescue StandardError => e
             err = Error.new('Validation', 50, e.message)
             render json: { status: Status.failed, error: err }, status: :unprocessable_entity
@@ -77,5 +77,9 @@ class V1::UserController < ApplicationController
 
   def user_params
     params.require(:user).permit(:username, :password, :role, :employee_id)
+  end
+
+  def update_params
+    params.permit(:username, :password, :role, :employee_id)
   end
 end

@@ -33,6 +33,6 @@ module ErpBackend
         )
       end
     end
-    config.autoload_paths += Dir[ Rails.root.join('app', 'controllers', "helpers") ]
+    #config.autoload_paths += Dir[ Rails.root.join('app', 'controllers', "helpers") ]
   end
 end

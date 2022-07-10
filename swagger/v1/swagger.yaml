@@ -141,6 +141,28 @@ paths:
           description: Employee not found
         '422':
           description: Validation data
+  "/v1/session":
+    post:
+      summary: create session
+      tags:
+      - Session
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+              - username
+              - password
   "/v1/user":
     get:
       summary: list users

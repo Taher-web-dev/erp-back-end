@@ -12,18 +12,20 @@ RSpec.describe 'Users', type: :request do
                         "net_salary": 1550
                     }
                   }
+                  
   end
   get '/v1/employee'
   let!(:employee_id) { json['data']['id'] }
   describe 'Get/index: Successful Reponse' do
     before do
       post '/v1/user', params:
-              {user: {
+              { user:{
                 username: Faker::Lorem.word,
                 password: Faker::Lorem.word,
                 role: 'admin',
                 employee_id: employee_id,
-              }}
+    }
+              }
           
       #FactoryBot.create_list(:user, 10)
       get '/v1/user'
@@ -44,13 +46,13 @@ RSpec.describe 'Users', type: :request do
       end
       delete "/v1/user/#{current_user[0]['id']}" unless current_user.empty?
       post '/v1/user', params:
-                            {
+                            { 
                               user: {
                                 username: 'test',
                                 password: 'test',
                                 role: 'admin',
                                 employee_id: employee_id
-                              }
+    }
                             }
     end
     it 'return status 200' do
@@ -102,18 +104,19 @@ RSpec.describe 'Users', type: :request do
     let!(:new_user) { json['data'] }
     it 'update successfully with correct parametrs' do
       patch "/v1/user/#{new_user['id']}", params: {
-        user: {
+        
           username: 'Aziz',
-        }
+          password: 'test'
+        
       }
+      #p json['error']['message']
       expect(response).to have_http_status(200)
     end
     it 'update with not found user id' do
       patch '/v1/user/1025', params:
                                {
-                                 user: {
-                                   username: 'Lilly'
-                                 }
+                                   username: 'Lilly',
+                                   password: 'test'
                                }
       expect(response).to have_http_status(404)
     end
@@ -121,9 +124,7 @@ RSpec.describe 'Users', type: :request do
       get '/v1/user'
       patch "/v1/user/#{new_user['id']}", params:
                            {
-                             user: {
-                               phone: 77_471_580
-                             }
+                               phone: 77_471_580,
                            }
       expect(response).to have_http_status(401)
     end
